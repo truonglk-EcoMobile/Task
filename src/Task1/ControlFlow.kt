@@ -1,7 +1,19 @@
+package Task1
+
 fun main(){
+    demoCondition()
+    demoFor()
+    demoWhen(2)
+    demoWhile()
+    demoDoWhile()
+    demoBreak()
+    demoContinue()
+}
+
+//điều kiện
+fun demoCondition(){
     val a = 8
     val b = 10
-    // Điều kiện
     if (a > b) {
         println("a lớn hơn b")
     }else if (a == b) {
@@ -9,16 +21,10 @@ fun main(){
     }else{
         println("a nhỏ hơn b")
     }
+}
 
-    // When
-    val monHoc = "Toan"
-    when (monHoc) {
-        "Toan" -> println("Môn Toán")
-        "Van" -> println("Môn Văn")
-        else -> println("Môn chưa rõ")
-    }
-
-    // Các kiểu for
+//for
+fun demoFor(){
     //1
     for (i in 1..8){
         println(i)
@@ -43,20 +49,42 @@ fun main(){
     for (i in list1.indices){
         println("index: $i với giá trị là: ${list1[i]}")
     }
+}
 
-    // While: kiểm tra điều kiện sau đó mới thực thi
+//When
+fun demoWhen(so: Int){
+    when (so) {
+        in 1..5 ->{
+            println("số từ 1 đến 5")
+        }
+        in 6..10 ->{
+            println("số từ 6 đến 10")
+        }
+        else -> {
+            println("số lớn hơn 10")
+        }
+    }
+}
+
+//While
+fun demoWhile(){
     var count = 1
     while (count <5){
         println("count: $count")
         count++
     }
-    // do while: thực hiện ít nhất 1 lần sau đó mới kiểm tra điều kiện
+}
+
+//do-while
+fun demoDoWhile(){
     var count2 = 5
     do {
         println("count2: $count2")
     }while (count2 < 5)
+}
 
-    //break: Thoát vòng lặp
+//break: Thoát vòng lặp
+fun demoBreak(){
     var count3 = 1
     while (count3 < 5){
         if (count3 == 2){
@@ -66,7 +94,10 @@ fun main(){
         count3++
 
     }
-    //continue: sang vòng lặp tiếp theo luôn
+}
+
+//continue: sang vòng lặp tiếp theo luôn
+fun demoContinue(){
     for (i in 1..5){
         if (i ==2) continue
         println("i: $i")
