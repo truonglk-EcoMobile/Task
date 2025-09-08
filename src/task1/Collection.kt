@@ -1,4 +1,4 @@
-package Task1
+package task1
 
 fun main(){
     demoList()
@@ -16,6 +16,9 @@ fun demoList(){
     println("mutableList = $mutableList")
     mutableList.add(6)
     println("mutableList sau khi add = $mutableList")
+    mutableList.removeAt(2)
+    mutableList.removeAt(0)
+    println("mutableList sau khi remove = $mutableList")
 }
 
 //set
@@ -30,6 +33,8 @@ fun demoMap(){
     println("map = $map")
     println("các key của map = ${map.keys}")
     println("các giá trị của map = ${map.values}")
+    println("map.constainsKey: ${map.containsKey(2)}")
+    println("map.constainsValue: ${map.containsValue("three")}")
 }
 
 //các hàm của collection
@@ -67,5 +72,13 @@ fun demoFuncOfCollection(){
     println("min: ${listChuaSapXep.min()}") // phần tử nhỏ nhất
     println("sum: ${listChuaSapXep.sum()}") //tổng các phần tử
     println("take 3: ${listChuaSapXep.take(3)}") // lấy 3 phần tử đầu
+    println("takeLast 3: ${listChuaSapXep.takeLast(3)}") // lấy 3 phần tử cuối
     println("drop 3: ${listChuaSapXep.drop(3)}") // bỏ 3 pần tử đầu
+    listChuaSapXep.reversed() //đảo ngược danh sách
+    println("Danh sách sau khi đảo ngược: $listChuaSapXep")
+    println("random 1 số trong danh sách: ${listChuaSapXep.random()}")
+    println("Chuyển danh sách thành chuỗi: ${listChuaSapXep.joinToString(prefix = "{", postfix = "}",separator = "+")}")
+    println("phần tử đầu hoặc null: ${listChuaSapXep.firstOrNull()}")
+    println("phần tử cuối hoặc null: ${listChuaSapXep.lastOrNull()}")
+    println("danh sách mới lấy từ danh sách cũ từ vị trí 1 đến 3 ${listChuaSapXep.slice(1..3)}")
 }
