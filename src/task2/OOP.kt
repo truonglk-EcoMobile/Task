@@ -11,7 +11,7 @@ import task2.model.Result
 import task2.model.Square
 import task2.model.User
 import task2.`object`.DatabaseManager
-import task2.`object`.MathUtils
+import task2.`object`.companionobject.MathUtils
 
 fun handleResult(result: Result<out Any>) {
     when (result) {
@@ -82,10 +82,11 @@ fun main() {
     val product1 = Product("P001", "Laptop", 1500.0)
     val product2 = product1.copy(name = "Gaming Laptop", price = 2000.0)
 
-    println("Product 1: $product1")
-    println("Product 2: $product2")
+    println("Product 1: ${product1.toString()}")
+    println("Product 2: ${product2.toString()}")
     println("product 1 == product2 = ${product1 == product2}")
 
+    println("\n=== DATA CLASS VALIDATION===")
     val user1 = User("truong", "truong@gmail.com.com", 21)
     println("User1: $user1")
     try {
@@ -117,6 +118,8 @@ fun main() {
     val task2Priority = Priority.MEDIUM
     println("Task 1: ${task1Priority.displayName}")
     println("Task 2: ${task2Priority.displayName}")
+    println("Task 1 description: ${task1Priority.getDescription()}")
+    println("Task 2 description: ${task2Priority.getDescription()}")
     println("Is task 1 higher priority than task 2?  ${task1Priority.isHigherThan(task2Priority)}")
 
     println("\n=== SINGLETON OBJECT ===")
