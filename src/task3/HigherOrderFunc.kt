@@ -79,3 +79,26 @@ fun demoLambdaFunc(){
     }}")
 
 }
+
+// Inline function: Hàm được đánh dấu inline sẽ thay thế lời gọi hàm bằng code của lambda tại nơi gọi
+inline fun calculateWithInline(start: Int, end: Int, operation: (Int, Int) -> Int): Int {
+    if (start > end) {
+        return 0
+    }
+    var result = start
+    try {
+        for (i in start + 1..end) {
+            result = operation(result, i)
+        }
+    } catch (e: Exception) {
+        println("Lỗi inline: ${e.message}")
+    }
+    return result
+}
+
+// Demo sử dụng inline function
+fun demoInlineFunc() {
+    println("Demo Inline Function:")
+    println("Inline với sum: ${calculateWithInline(1, 4) { a, b -> a + b }}")
+    println("Inline với times và plus: ${calculateWithInline(1, 4) { a, b -> a * b + 2 }}")
+}
