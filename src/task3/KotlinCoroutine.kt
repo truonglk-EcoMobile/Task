@@ -3,8 +3,8 @@ package task3
 import kotlinx.coroutines.*
 import kotlinx.coroutines.runBlocking
 import kotlin.system.measureTimeMillis
-
-
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.Dispatchers
 fun main(){
     var choice = -1
     while (choice != 0) {
@@ -20,7 +20,8 @@ fun main(){
                 "\n9. DEMO COROUTINE SCOPE" +
                 "\n10. DEMO EXCEPTION IN LAUNCH" +
                 "\n11. DEMO EXCEPTION IN ASYNC" +
-                "\n12. DEMO COROUTINE EXCEPTION HANDLER")
+                "\n12. DEMO COROUTINE EXCEPTION HANDLER" +
+                "\n13. DEMO FLOW")
         choice = readLine()!!.toInt()
         when(choice) {
             1 -> demoBlocking()
@@ -35,6 +36,7 @@ fun main(){
             10 -> demoExceptionWithLaunch()
             11 -> demoExceptionWithAsync()
             12 -> demoCoroutineExceptionHandler()
+            13 -> getFlow()
             else -> break
         }
     }
@@ -53,8 +55,14 @@ fun demoBlocking(){
 
 //Giả lập công việc gì đó mất nhiều thời gian
 fun executeLongTask(){
-    for (i in 1..2_000_000) {
-        print(" ")
+    var nextPrintTime = System.currentTimeMillis()
+    var i = 0
+    while (i < 100) {
+        if (System.currentTimeMillis() >= nextPrintTime) {
+            print(" ")
+            i++
+            nextPrintTime += 10
+        }
     }
 }
 fun sayHello() = println("Hello")
@@ -63,7 +71,7 @@ fun sayWorld() = println("World")
 fun demoCoroutine(){
     runBlocking{ //Tạo 1 coroutine, mã theo sau không chạy tới khi coroutine của nó chạy xong
         launch{ //Tạo 1 coroutine, mã theo sau chạy được luôn, nếu không set context thì mặc định là Default
-            delay(1000) //Tạm dừng 1s nhưng không block thread
+            executeLongTask()
             sayWorld()
         }
         sayHello()
@@ -74,7 +82,7 @@ fun demoCoroutine(){
 
 //withContext: chỉ định khối code trong nó chạy trên thread nào
 fun demoWithContextAndDispatcher(){
-    runBlocking(){//Mặc định runBlocking là Dispatchers.Main: Các tác vụ liên quan tới cập nhật UI
+    runBlocking{//Mặc định runBlocking là Dispatchers.Main: Các tác vụ liên quan tới cập nhật UI
         println("Current Thread: ${Thread.currentThread().name}")
         withContext(Dispatchers.Default){//Các tác vụ tính toán nặng
             println("Thread in withContext (default): ${Thread.currentThread().name}")
@@ -179,7 +187,7 @@ fun demoWithTimeOut(){
                 }
             }
         }catch (e: TimeoutCancellationException){
-            println("timeout exception")
+            println("timeout exception : ${e.message}")
         }
     }
 }
@@ -187,7 +195,7 @@ fun demoWithTimeOut(){
 //Coroutine cha luôn đợi coroutine con chạy hết nên "Im parent" mới được in ra cuối
 fun demoCoroutineScope(){
     runBlocking {
-        launch(){
+        launch{
             delay(1000L)
             println("Im children1")
         }
@@ -207,7 +215,7 @@ fun demoCoroutineScope(){
 @OptIn(DelicateCoroutinesApi::class)
 fun demoExceptionWithLaunch(){
     runBlocking {
-        val launch = GlobalScope.launch {
+        GlobalScope.launch {
             println("Exception in launch")
             throw ArithmeticException()
         }
@@ -231,17 +239,32 @@ fun demoExceptionWithAsync(){
 
 //CoroutineExceptionHandler
 fun demoCoroutineExceptionHandler(){
-    val handler = CoroutineExceptionHandler { _, exception ->
-        println("Exception: $exception")
+    runBlocking {
+        val handler = CoroutineExceptionHandler { _, exception ->
+            println("Exception: $exception")
+        }
+        launch(handler) {
+            throw AssertionError()
+        }
+        async(handler) {
+            throw ArithmeticException()
+        }
     }
+}
 
-    val job = GlobalScope.launch(handler) {
-        throw AssertionError()
+fun emitFlow(): Flow<Int> = flow {
+    println("Start emit flow")
+    for (i in 1..10) {
+        delay(1000L)
+        emit(i)
     }
+}
 
-    val deferred = GlobalScope.async(handler) {
-        throw ArithmeticException()
+fun getFlow(){
+    runBlocking {
+        val flow = emitFlow()
+        //Lấy giá trị được emit từ hàm emit
+        flow.collect { value -> println(value) }
     }
-
 }
 
